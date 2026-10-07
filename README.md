@@ -1,0 +1,421 @@
+# Assignment 4 — Loading Data with async and npm
+
+In Assignment 3, the animals lived in an array typed into `script.js`. Real
+apps rarely work that way. Their data comes from somewhere else, such as a
+file or a server, and it takes time to arrive. In this assignment, you will
+load the animals from a JSON file, show the user what is happening while they
+load, and use your first npm package.
+
+By completing the assignment, you will practice the main ideas from Weeks 6
+and 7:
+
+- creating a project with npm and running it with Vite;
+- understanding `package.json`, `node_modules`, and `package-lock.json`;
+- loading data with `fetch()`, `async`, and `await`;
+- handling the loading and error states, so the user is never left with a blank
+  page; and
+- installing an npm package, importing it, and deciding whether it was worth
+  adding.
+
+The adoption board itself doesn't change. Filtering, sorting, adopting, and
+the count all work the same way they did in Assignment 3. What changes is
+where the data comes from and how the project runs.
+
+## Getting started
+
+This repository contains a **completed, working version of Assignment 3**. You
+can build on it, or you can use your own Assignment 3 code.
+
+**To use your own Assignment 3 code:** after you set up this repository, copy
+your Assignment 3 `script.js` over the one in this project. If you also changed
+`index.html` or `style.css` for extra credit, copy those over too, then copy the
+`.error-message` rule from the bottom of this project's `style.css` into yours.
+Commit this change before you start the TODOs.
+
+Use this option only if your Assignment 3 works completely. If you aren't
+sure, use the provided version.
+
+## Before you begin
+
+You need Node.js installed (Week 7). In the VS Code terminal, run:
+
+```
+node -v
+npm -v
+```
+
+Both should print a version number. The Node version must be **20.19 or
+newer**. If either command fails, install the current LTS version from
+[nodejs.org](https://nodejs.org) and restart VS Code.
+
+## Files
+
+- `index.html`, `style.css`, and `script.js` are the completed Assignment 3
+  board.
+- `public/animals.json` contains the shelter's animals as JSON. They are the
+  same eight animals as before, with two new properties: `intakeDate`, the
+  date the animal arrived at the shelter, and `breed`, which dogs have.
+- `.gitignore` tells Git which files and folders to leave out of your
+  repository. It's explained in TODO 1.
+
+**Do not change the animal data in `animals.json`.** The expected results below
+depend on it.
+
+---
+
+## Your tasks
+
+Complete the five TODOs in order. Each one ends with a check. Don't move on
+until the check works.
+
+### TODO 1: Run the project with npm and Vite
+
+From now on, this project runs with **Vite** instead of Live Server. Vite is a
+development server, like Live Server, but it can also load npm packages into
+the browser, which Live Server can't.
+
+Open the VS Code terminal in the project folder and work through these steps.
+
+1. Create a `package.json` file:
+
+   ```
+   npm init -y
+   ```
+
+   `package.json` describes your project: its name, the packages it needs,
+   and the commands it can run. Open it and look.
+
+2. Install Vite:
+
+   ```
+   npm install --save-dev vite
+   ```
+
+   This does three things. It downloads Vite into a new `node_modules` folder,
+   it records Vite under `"devDependencies"` in `package.json`, and it creates
+   `package-lock.json`, which records the exact version of every package that
+   was installed.
+
+3. In `package.json`, replace the `"scripts"` section with:
+
+   ```json
+   "scripts": {
+     "dev": "vite",
+     "build": "vite build",
+     "preview": "vite preview"
+   },
+   ```
+
+   Each script is a command you can run with `npm run`. For example,
+   `npm run dev` runs `vite`.
+
+4. In `index.html`, change the script tag to:
+
+   ```html
+   <script type="module" src="script.js"></script>
+   ```
+
+   `type="module"` lets `script.js` use `import` (TODO 4).
+
+5. Start the development server:
+
+   ```
+   npm run dev
+   ```
+
+   Vite prints an address such as `http://localhost:5173/`. Ctrl+click it to
+   open the page. Leave this terminal running while you work. To stop the
+   server, click in the terminal and press **Ctrl+C**.
+
+**About `node_modules`:** this folder holds Vite and everything Vite needs, and
+it's large. It's never committed to Git, which is why the provided `.gitignore`
+lists it. Anyone who clones your repository runs `npm install` to recreate it
+from `package.json` and `package-lock.json`. **Do commit `package.json` and
+`package-lock.json`.**
+
+**Check:** the board works exactly as it did in Assignment 3, but now at the
+`localhost` address from Vite. In GitHub Desktop or `git status`, you should see
+`package.json` and `package-lock.json` as new files, and no `node_modules`.
+
+### TODO 2: Remove the hard-coded animals
+
+The animals now come from `public/animals.json`. Vite serves everything in
+`public` from the root of the site. With the dev server running, visit
+`http://localhost:5173/animals.json` to see the file.
+
+In `script.js`:
+
+1. Delete the `animals` array and replace it with an empty array:
+
+   ```js
+   let animals = [];
+   ```
+
+   It's `let` now, not `const`, because in TODO 3 you'll replace the whole
+   array once the data arrives.
+
+2. At the very bottom of the file, delete the two lines that display the
+   animals when the page opens (`displayAnimals(animals);` and
+   `updateCount();`). In TODO 3, you'll replace them.
+
+**Check:** the page shows "There are no animals to show." and the count says
+0 of 0. That's correct for now. The array is empty because nothing loads the
+data yet.
+
+### TODO 3: Load the animals with fetch
+
+At the bottom of `script.js`, write an `async` function named `loadAnimals()`,
+then call it so it runs when the page opens.
+
+`loadAnimals()` must:
+
+1. **Show a loading state.** Before the request starts, set the
+   `#animal-count` paragraph to `Loading animals...` and clear
+   `#animal-list`.
+2. **Request the data.** Use `await fetch("/animals.json")` to request the
+   file.
+3. **Check the response.** If `response.ok` is `false`, throw an error, for
+   example:
+
+   ```js
+   throw new Error(`Request failed with status ${response.status}`);
+   ```
+
+4. **Read the data.** Use `await response.json()` to turn the response into an
+   array, store it in `animals`, and call `updateDisplay()`.
+5. **Handle errors.** Wrap steps 2–4 in `try`/`catch`. In the `catch` block,
+   log the error with `console.error()`, clear the count paragraph, and add a
+   paragraph to `#animal-list` with the class `error-message` that says:
+
+   ```
+   Sorry, the animals couldn't be loaded. Try refreshing the page.
+   ```
+
+**Required comments:**
+
+- Above your `fetch()` line, explain what `await` does. What is paused, and
+  what keeps working while the page waits?
+- Above your `response.ok` check, explain why the check is needed. (Hint: when
+  does `fetch()` fail on its own, and when does it return a response that
+  isn't what you wanted?)
+
+**Check each state:**
+
+- **Loaded:** refresh. All eight animals appear, and everything from
+  Assignment 3 works. Use the expected results table below.
+- **Loading:** the file loads too quickly to see the message. To slow it
+  down, open DevTools (F12), select the **Network** tab, change **No
+  throttling** to **3G**, and refresh. You should see `Loading animals...`
+  before the cards appear. Set throttling back to **No throttling** when
+  you're done.
+- **Error:** temporarily change the path to `"/animal.json"` (no s) and
+  refresh. You should see the error message, and the console should show the
+  error. Change the path back.
+
+**Why that error looks strange:** Vite answers a request for a file that doesn't
+exist with the site's `index.html` page, not a 404 error. So `response.ok` is
+`true`, and the error comes from `response.json()`, which can't read HTML:
+`Unexpected token '<'`. Your `catch` block handles both kinds of failure. The
+`response.ok` check matters with real servers, which do send a 404. You'll
+build one later this semester.
+
+### TODO 4: Use an npm package
+
+Each card will show when the animal arrived at the shelter:
+
+```
+Arrived Aug 20, 2026 (48 days ago)
+```
+
+Dates are surprisingly hard to format and calculate with plain JavaScript, so
+you'll use the [Day.js](https://day.js.org/) package.
+
+1. Install it:
+
+   ```
+   npm install dayjs
+   ```
+
+   Look at `package.json` again. Day.js is listed under `"dependencies"`,
+   while Vite is under `"devDependencies"`. Day.js runs in the browser as part
+   of your app. Vite is only a tool you use while you build it.
+
+2. At the very top of `script.js`, import it:
+
+   ```js
+   import dayjs from "dayjs";
+   ```
+
+3. In `displayAnimals()`, add a paragraph to each card showing the arrival
+   date and the number of days since then. These two Day.js calls do the work:
+
+   ```js
+   dayjs(animal.intakeDate).format("MMM D, YYYY"); // "Aug 20, 2026"
+   dayjs().diff(animal.intakeDate, "day");         // days from then until today
+   ```
+
+   `dayjs()` with nothing in the parentheses means right now.
+
+**Check:** each card shows its arrival date. The dates match the table below.
+The number of days depends on today's date, so yours will be larger than the
+example.
+
+**Try this:** open `index.html` with Live Server instead of Vite. The page
+breaks, and the console says something like
+`Failed to resolve module specifier "dayjs"`. The browser doesn't know where
+to find `dayjs`. Vite does, because it reads `node_modules`. Close the Live
+Server tab and go back to `npm run dev`.
+
+### TODO 5: Document the project
+
+Add a section at the **top** of this `README.md`, above the title, named
+`## About this project`. It must include:
+
+1. **How to run it.** The commands someone needs after cloning your
+   repository, in order, and one sentence explaining why `npm install` is
+   needed.
+2. **Dependency check.** Run `npm run build`. Vite builds the finished site
+   into a `dist` folder and lists the files it created with their sizes. Then
+   answer, in a few sentences:
+   - What does Day.js do for this project?
+   - What is the size of the `.js` file that `npm run build` reports?
+   - Could you have done the same thing without Day.js? Was it worth adding?
+     Either answer is fine if you explain your reasoning.
+
+`npm run build` must finish without errors.
+
+---
+
+## Expected results
+
+Use these to check your work after TODO 3. All of them assume you have not
+adopted or returned anything since the last refresh.
+
+| Filter | Sort | Cards shown, in order |
+| --- | --- | --- |
+| All | Original order | Luna, Biscuit, Pepper, Moose, Charly, Bill, Chompers, Beowulf |
+| All | Name | Beowulf, Bill, Biscuit, Charly, Chompers, Luna, Moose, Pepper |
+| Available | Original order | Luna, Moose, Charly, Chompers |
+| Available | Age | Chompers, Luna, Charly, Moose |
+| Adopted | Age | Bill, Pepper, Biscuit, Beowulf |
+
+The count starts at **4 of 8 animals are available for adoption.**
+
+Arrival dates after TODO 4:
+
+| Animal | Arrived |
+| --- | --- |
+| Luna | Aug 20, 2026 |
+| Biscuit | Jun 2, 2026 |
+| Pepper | Jul 15, 2026 |
+| Moose | Sep 10, 2026 |
+| Charly | Sep 28, 2026 |
+| Bill | Aug 3, 2026 |
+| Chompers | Oct 1, 2026 |
+| Beowulf | May 11, 2026 |
+
+---
+
+## Extra credit (up to +3 points)
+
+Extra credit is for students who finish the required tasks and want to go
+further. **It is only graded if the required tasks work.** A broken required
+feature can't be made up with an extra one.
+
+Each feature below is worth **1 point**, up to a maximum of **3 points**. To
+count, a feature must:
+
+- work completely, without console errors;
+- still work together with the filters, sort, count, and loading;
+- be commented in your own words; and
+- be listed in the **EXTRA CREDIT** comment at the top of `script.js`.
+
+Extra credit features from Assignment 3 don't count again.
+
+1. **Dog photos.** The [Dog CEO API](https://dog.ceo/dog-api/) returns a random
+   photo of a breed from `https://dog.ceo/api/breed/BREED/images/random`. After
+   the animals load, request a photo for every dog that has a `breed`, store
+   each photo URL on its animal, and show it on the card with useful `alt`
+   text. Request the photos **at the same time** with `Promise.all()`, not one
+   after another. Photos must not change when the user filters, sorts, or
+   adopts. If a photo request fails, the card still appears without a photo.
+2. **Try again.** Add a **Try again** button to the error message that loads
+   the animals again without refreshing the page.
+3. **Saving....** Pretend each adoption is sent to a server. Write a function
+   `wait(ms)` that returns a Promise that resolves after `ms` milliseconds
+   (use `setTimeout`). When the user clicks **Adopt** or **Return**, disable the
+   button and change its text to `Saving...`, `await wait(1000)`, then change
+   the animal.
+4. **Newest arrivals.** Add a **Newest arrival** option to the sort menu that
+   orders animals by `intakeDate`, most recent first. It must work with every
+   filter.
+5. **A second package.** Install and use another npm package that adds a
+   feature, such as [canvas-confetti](https://www.npmjs.com/package/canvas-confetti)
+   when an animal is adopted or [Fuse.js](https://www.fusejs.io/) for a
+   forgiving name search. Add it to the dependency check in your
+   **About this project** section.
+6. **Format with npm.** Install [Prettier](https://prettier.io/) as a dev
+   dependency, add a `"format": "prettier --write ."` script, and run
+   `npm run format`. Explain in your **About this project** section why
+   Prettier is a dev dependency.
+7. **Your own idea.** A feature of similar size that you design. **Ask me
+   before you start** so I can confirm it counts.
+
+---
+
+## Comment your code
+
+**Comments are graded.** Add comments in your own words explaining what your
+new code does and why, including the two required comments in TODO 3. Comments
+that only restate the code, like `// fetch the animals` above a `fetch()`
+line, don't count.
+
+## Debugging tips
+
+- **The console says `animals is not defined` when you type `animals`.** That's
+  expected. With `type="module"`, variables in `script.js` stay inside the
+  file instead of becoming global. Use `console.log(animals)` in your code
+  instead.
+- **`npm` isn't recognized, or Vite says your Node version is too old.**
+  Install the current LTS version of Node and restart VS Code.
+- **`npm run dev` says `Missing script: "dev"`.** Check the `"scripts"` section
+  of `package.json` (TODO 1, step 3). Watch for missing commas and quotes.
+- **`Failed to resolve module specifier "dayjs"`.** You opened the page with
+  Live Server, or you haven't run `npm install dayjs`. Use the `npm run dev`
+  address.
+- **Vite shows an error over the page.** Read it. It names the file and line
+  with the problem, usually a typo.
+- **The page doesn't change after you save.** Make sure `npm run dev` is still
+  running in the terminal.
+- **You cloned the project onto another computer and nothing runs.** Run
+  `npm install` first to recreate `node_modules`.
+
+## Commit and push
+
+Make **at least three commits of your own** while working. The starter commit
+does not count. Write messages that explain what changed, for example:
+
+- `Run the project with Vite`
+- `Load animals from animals.json`
+- `Show arrival dates with Day.js`
+
+Push before you submit:
+
+```
+git push
+```
+
+## Before you submit
+
+- All five TODOs are complete, and the board matches the expected results.
+- The page loads with `npm run dev`, shows the loading and error states, and
+  the console shows **no JavaScript errors**.
+- `npm run build` finishes without errors.
+- `package.json` and `package-lock.json` are committed. `node_modules` and
+  `dist` are not.
+- You did not change the animal data in `animals.json`.
+- `script.js` is commented in your own words, including the two required
+  comments.
+- `README.md` starts with your **About this project** section.
+- Any extra credit features are listed at the top of `script.js`.
+- Your repository has at least three commits you made.
