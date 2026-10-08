@@ -1,25 +1,8 @@
 # Assignment 4 — Loading Data with async and npm
 
-In Assignment 3, the animals lived in an array typed into `script.js`. Real
-apps rarely work that way. Their data comes from somewhere else, such as a
-file or a server, and it takes time to arrive. In this assignment, you will
-load the animals from a JSON file, show the user what is happening while they
-load, and use your first npm package.
+You will continue building the animal adoption app in this assignment, but instead of working with an array of local data, you will fetch the data from a json file. While fetching the data, your interface will display a "loading" message, and depending on the response, show the resulting list or an error message.
 
-By completing the assignment, you will practice the main ideas from Weeks 6
-and 7:
-
-- creating a project with npm and running it with Vite;
-- understanding `package.json`, `node_modules`, and `package-lock.json`;
-- loading data with `fetch()`, `async`, and `await`;
-- handling the loading and error states, so the user is never left with a blank
-  page; and
-- installing an npm package, importing it, and deciding whether it was worth
-  adding.
-
-The adoption board itself doesn't change. Filtering, sorting, adopting, and
-the count all work the same way they did in Assignment 3. What changes is
-where the data comes from and how the project runs.
+You will also refactor your code to work as a Vite project. This will allow you to easily configure a third-party library using npm and incorporate it into your app.
 
 ## Getting started
 
