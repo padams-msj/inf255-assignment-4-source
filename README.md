@@ -49,19 +49,13 @@ Open the VS Code terminal in the project folder and work through these steps.
    npm init -y
    ```
 
-   `package.json` describes your project: its name, the packages it needs,
-   and the commands it can run. Open it and look.
-
 2. Install Vite:
 
    ```
    npm install --save-dev vite
    ```
 
-   This does three things. It downloads Vite into a new `node_modules` folder,
-   it records Vite under `"devDependencies"` in `package.json`, and it creates
-   `package-lock.json`, which records the exact version of every package that
-   was installed.
+   The `--save-dev` flag instructs `package.json` to mark Vite as a `devDependency` rather than a `dependency`. This is because Vite is only needed for developing the app, not for running it once it's done. 
 
 3. In `package.json`, replace the `"scripts"` section with:
 
@@ -73,10 +67,9 @@ Open the VS Code terminal in the project folder and work through these steps.
    },
    ```
 
-   Each script is a command you can run with `npm run`. For example,
-   `npm run dev` runs `vite`.
+   Normally, when scaffolding a Vite project from scratch (using `npm create vite@latest`) these scripts are auto-generated. Since we are converting an existing codebase to work with Vite, they need to be added manually.
 
-4. In `index.html`, change the script tag to:
+5. In `index.html`, change the script tag to:
 
    ```html
    <script type="module" src="script.js"></script>
@@ -84,7 +77,7 @@ Open the VS Code terminal in the project folder and work through these steps.
 
    `type="module"` lets `script.js` use `import` (TODO 4).
 
-5. Start the development server:
+6. Start the development server:
 
    ```
    npm run dev
