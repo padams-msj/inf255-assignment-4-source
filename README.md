@@ -6,30 +6,16 @@ You will also refactor your code to work as a Vite project. This will allow you 
 
 ## Getting started
 
-This repository contains a **completed, working version of Assignment 3**. You
-can build on it, or you can use your own Assignment 3 code.
+This repository contains a completed version of Assignment 3. You
+can use this starter code or your own code from Assignment 3.
 
 **To use your own Assignment 3 code:** after you set up this repository, copy
-your Assignment 3 `script.js` over the one in this project. If you also changed
+your Assignment 3 `script.js` over to this project. If you also changed
 `index.html` or `style.css` for extra credit, copy those over too, then copy the
 `.error-message` rule from the bottom of this project's `style.css` into yours.
-Commit this change before you start the TODOs.
 
 Use this option only if your Assignment 3 works completely. If you aren't
 sure, use the provided version.
-
-## Before you begin
-
-You need Node.js installed (Week 7). In the VS Code terminal, run:
-
-```
-node -v
-npm -v
-```
-
-Both should print a version number. The Node version must be **20.19 or
-newer**. If either command fails, install the current LTS version from
-[nodejs.org](https://nodejs.org) and restart VS Code.
 
 ## Files
 
@@ -53,9 +39,7 @@ until the check works.
 
 ### TODO 1: Run the project with npm and Vite
 
-From now on, this project runs with **Vite** instead of Live Server. Vite is a
-development server, like Live Server, but it can also load npm packages into
-the browser, which Live Server can't.
+We're going to migrate this app from LiveServer to Vite. Vite allows us to use `import` more easily.
 
 Open the VS Code terminal in the project folder and work through these steps.
 
