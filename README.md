@@ -20,7 +20,7 @@ sure, use the provided version.
 ## Files
 
 - `index.html`, `style.css`, and `script.js` are the completed Assignment 3
-  board.
+  project.
 - `public/animals.json` contains the shelter's animals as JSON. They are the
   same eight animals as before, with two new properties: `intakeDate`, the
   date the animal arrived at the shelter, and `breed`, which dogs have.
@@ -156,16 +156,15 @@ then call it so it runs when the page opens.
 
 **Check each state:**
 
-- **Loaded:** refresh. All eight animals appear, and everything from
-  Assignment 3 works. Use the expected results table below.
-- **Loading:** the file loads too quickly to see the message. To slow it
+- **Loaded:** refresh. All eight animals appear - use the "expected results" table below.
+- **Loading:** the file will probably load too quickly to see the message. To slow it
   down, open DevTools (F12), select the **Network** tab, change **No
   throttling** to **3G**, and refresh. You should see `Loading animals...`
   before the cards appear. Set throttling back to **No throttling** when
   you're done.
 - **Error:** temporarily change the path to `"/animal.json"` (no s) and
   refresh. You should see the error message, and the console should show the
-  error. Change the path back.
+  error. Change the path back after confirming.
 
 **Why that error looks strange:** Vite answers a request for a file that doesn't
 exist with the site's `index.html` page, not a 404 error. So `response.ok` is
@@ -217,8 +216,8 @@ example.
 
 ### TODO 5: Document the project
 
-Add a section at the **top** of this `README.md`, above the title, named
-`## About this project`. It must include:
+Add content to the top of this `README.md` file, above the title, titled
+`About this project`. It must include:
 
 1. **How to run it.** The commands someone needs after cloning your
    repository, in order, and one sentence explaining why `npm install` is
@@ -293,12 +292,6 @@ Extra credit features from Assignment 3 don't count again.
    when an animal is adopted or [Fuse.js](https://www.fusejs.io/) for a
    forgiving name search. Add it to the dependency check in your
    **About this project** section.
-5 **Format with npm.** Install [Prettier](https://prettier.io/) as a dev
-   dependency, add a `"format": "prettier --write ."` script, and run
-   `npm run format`. Explain in your **About this project** section why
-   Prettier is a dev dependency.
-6. **Your own idea.** A feature of similar size that you design. **Ask me
-   before you start** so I can confirm it counts.
 
 ---
 
