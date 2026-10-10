@@ -25,7 +25,7 @@ sure, use the provided version.
   same eight animals as before, with two new properties: `intakeDate`, the
   date the animal arrived at the shelter, and `breed`, which dogs have.
 - `.gitignore` tells Git which files and folders to leave out of your
-  repository. It's explained in TODO 1.
+  repository. 
 
 **Do not change the animal data in `animals.json`.** The expected results below
 depend on it.
@@ -69,7 +69,7 @@ Open the VS Code terminal in the project folder and work through these steps.
 
    Normally, when scaffolding a Vite project from scratch (using `npm create vite@latest`) these scripts are auto-generated. Since we are converting an existing codebase to work with Vite, they need to be added manually.
 
-5. In `index.html`, change the script tag to:
+4. In `index.html`, change the script tag to:
 
    ```html
    <script type="module" src="script.js"></script>
@@ -77,7 +77,7 @@ Open the VS Code terminal in the project folder and work through these steps.
 
    `type="module"` lets `script.js` use `import`.
 
-6. Start the development server:
+5. Start the development server:
 
    ```
    npm run dev
@@ -111,7 +111,7 @@ In `script.js`:
    The page now shows "There are no animals to show." and the count says
 0 of 0. At this point, there is no animal data to show.
 
-3. At the very bottom of the file, delete the two lines that display the
+2. At the very bottom of the file, delete the two lines that display the
    animals when the page opens (`displayAnimals(animals);` and
    `updateCount();`). We'll replace these later.
 
