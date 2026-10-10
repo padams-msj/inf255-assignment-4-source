@@ -15,7 +15,16 @@
 // Animal Data
 // ------------------------------------
 
-let animals = [];
+const animals = [
+	{ id: 1, name: "Luna", species: "cat", age: 3, adopted: false },
+	{ id: 2, name: "Biscuit", species: "dog", age: 7, adopted: true },
+	{ id: 3, name: "Pepper", species: "cat", age: 1, adopted: true },
+	{ id: 4, name: "Moose", species: "dog", age: 5, adopted: false },
+	{ id: 5, name: "Charly", species: "dog", age: 4, adopted: false },
+	{ id: 6, name: "Bill", species: "cat", age: 0.5, adopted: true },
+	{ id: 7, name: "Chompers", species: "rabbit", age: 0.5, adopted: false },
+	{ id: 8, name: "Beowulf", species: "dog", age: 7, adopted: true },
+];
 
 // What the user currently wants to see. The page controls change these.
 let activeFilter = "all";
@@ -157,9 +166,6 @@ sortSelect.addEventListener("change", () => {
 	updateDisplay();
 });
 
-loadAnimals();
-
-async function loadAnimals() {
-	const data = await fetch("/animals.json");
-	console.log(data);
-}
+// Display the original list and the count when the page first opens.
+displayAnimals(animals);
+updateCount();
