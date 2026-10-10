@@ -3,10 +3,6 @@
 /*
  * Animal Adoption Board
  *
- * This is a completed version of Assignment 3. Assignment 4 builds on it.
- * If your own Assignment 3 works, you may use your script.js instead
- * (see README.md).
- *
  * EXTRA CREDIT: If you build any Assignment 4 extra credit features, list
  * them here (see README.md). Features that are not listed here will not be
  * graded.
